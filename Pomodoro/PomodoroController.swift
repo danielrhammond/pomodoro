@@ -50,17 +50,17 @@ class PomodoroController {
     // MARK: Menu Actions
     private func actionsForState(state: StatusBarState) -> [MenuAction] {
         var menuActions = [MenuAction]()
-        if let startedState = state.startedState {
-            menuActions.append(MenuAction(title: "Start", action: { [weak self] _ in self?.state = startedState }))
+        if state.actions.contains(.Start) {
+            menuActions.append(MenuAction(title: "Start", action: { [weak self] _ in self?.state = (self?.state.startedState!)! }))
         }
-        if let resumedState = state.resumedState {
-            menuActions.append(MenuAction(title: "Resume", action: { [weak self] _ in self?.state = resumedState }))
+        if state.actions.contains(.Pause) {
+            menuActions.append(MenuAction(title: "Pause", action: { [weak self] _ in self?.state = (self?.state.pausedState!)! }))
         }
-        if let skippedState = state.nextSkip {
-            menuActions.append(MenuAction(title: "Skip", action: { [weak self] _ in
-                print("skip to \(skippedState)")
-                self?.state = skippedState
-                }))
+        if state.actions.contains(.Resume) {
+            menuActions.append(MenuAction(title: "Resume", action: { [weak self] _ in self?.state = (self?.state.resumedState!)! }))
+        }
+        if state.actions.contains(.Skip) {
+            menuActions.append(MenuAction(title: "Skip", action: { [weak self] _ in self?.state = (self?.state.nextSkip!)! }))
         }
         return menuActions
     }

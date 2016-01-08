@@ -85,7 +85,7 @@ extension StatusBarState {
     var nextSkip: StatusBarState? {
         switch self {
         case .PausedWork, .PausedBreak, .WaitingBreak, .OnBreak, .OnWork:
-            return .WaitingWork(10)
+            return .WaitingWork(WORK_DURATION)
         default:
             return nil
         }
@@ -128,7 +128,7 @@ extension StatusBarState {
         get {
             var result = Actions()
             if startedState != nil {
-                result.unionInPlace(.Resume)
+                result.unionInPlace(.Start)
             }
             if pausedState != nil {
                 result.unionInPlace(.Pause)
