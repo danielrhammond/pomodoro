@@ -68,13 +68,13 @@ extension StatusBarState {
             if duration > 0 {
                 return .OnBreak(duration-1)
             } else {
-                return .WaitingWork(10)
+                return .WaitingWork(WORK_DURATION)
             }
         case .OnWork:
             if duration > 0 {
                 return .OnWork(duration-1)
             } else {
-                return .WaitingBreak(10)
+                return .WaitingBreak(BREAK_DURATION)
             }
         default:
             return nil
@@ -143,8 +143,11 @@ extension StatusBarState {
     }
 }
 
-func formatSeconds(seconds: Int) -> String {
-    return "\(seconds)s"
+private func formatSeconds(seconds: Int) -> String {
+    let date = NSDate()
+    let endDate = NSDate(timeIntervalSinceNow: Double(seconds))
+    let components = NSCalendar.currentCalendar().components([.Minute, .Second], fromDate: date, toDate: endDate, options: NSCalendarOptions(rawValue: 0))
+    return "\(components.minute):\(components.second/10)\(components.second%10)"
 }
 
 func ==(a: StatusBarState, b: StatusBarState) -> Bool {

@@ -8,7 +8,9 @@
 
 import Foundation
 
-private let DEFAULT_STATE = StatusBarState.WaitingWork(10)
+let WORK_DURATION = 180
+let BREAK_DURATION = 90
+private let DEFAULT_STATE = StatusBarState.WaitingWork(WORK_DURATION)
 
 class PomodoroController {
     // MARK: Public Properties
@@ -17,7 +19,6 @@ class PomodoroController {
     // MARK: Private Properties
     private(set) var state = DEFAULT_STATE {
         didSet {
-            print("didSet state \(state)")
             if oldValue.actions != state.actions {
                 actions = actionsForState(state)
             }
