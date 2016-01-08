@@ -37,19 +37,6 @@ extension StatusBarState {
         }
     }
 
-    var menuActions: [MenuAction] {
-        get {
-            switch self {
-            case .WaitingWork, .WaitingBreak:
-                let duration = self.duration
-                let start = MenuAction(title: "Start", action: { _ in print("start: \(duration)") })
-                return [start]
-            default:
-                return []
-            }
-        }
-    }
-
     var title: String {
         get {
             switch self {
@@ -122,12 +109,5 @@ func formatSeconds(seconds: Int) -> String {
     return "\(seconds)s"
 }
 
-let item = MenuAction(title: "Foobar", action: { _ in print("in action block ok?") })
 
-func menuForState(state: StatusBarState) -> NSMenu? {
-    print("returning menu for state \(state)")
-    let menu = NSMenu()
-    menu.addItem(item.item)
-    menu.itemArray.first?.enabled = true
-    return menu
 }
