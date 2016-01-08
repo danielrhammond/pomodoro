@@ -48,9 +48,10 @@ extension StatusBarState {
     var title: String {
         get {
             switch self {
-            case .WaitingWork, .WaitingBreak:
-                let duration = self.duration
-                return "Waiting \(formatSeconds(duration))"
+            case .WaitingWork:
+                return "Work Time!"
+            case .WaitingBreak:
+                return "Break Time!"
             case .PausedWork, .PausedBreak:
                 let duration = self.duration
                 return "Paused \(formatSeconds(duration))"
