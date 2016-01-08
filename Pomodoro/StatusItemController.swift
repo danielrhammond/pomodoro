@@ -109,5 +109,32 @@ func formatSeconds(seconds: Int) -> String {
     return "\(seconds)s"
 }
 
-
+func ==(a: StatusBarState, b: StatusBarState) -> Bool {
+    switch a {
+    case .WaitingWork(let a):
+        if case .WaitingWork(let b) = b {
+            return a == b
+        }
+    case .PausedWork(let a):
+        if case .PausedWork(let b) = b {
+            return a == b
+        }
+    case .OnWork(let a):
+        if case .OnWork(let b) = b {
+            return a == b
+        }
+    case .WaitingBreak(let a):
+        if case .WaitingBreak(let b) = b {
+            return a == b
+        }
+    case .PausedBreak(let a):
+        if case .PausedBreak(let b) = b {
+            return a == b
+        }
+    case .OnBreak(let a):
+        if case .OnBreak(let b) = b {
+            return a == b
+        }
+    }
+    return false
 }
