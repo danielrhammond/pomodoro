@@ -20,8 +20,9 @@ class PomodoroController {
             actions = actionsForState(state)
             menuTitleSignal.fire(state.title)
             let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
+            let capturedState = state
             dispatch_after(delayTime, dispatch_get_main_queue()) { [weak self] in
-                guard let state = self?.state else { return }
+                guard let state = self?.state where state == capturedState else { return }
                 if let next = state.nextTick {
                     self?.state = next
                 }
