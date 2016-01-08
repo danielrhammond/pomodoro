@@ -17,7 +17,10 @@ class PomodoroController {
     // MARK: Private Properties
     private(set) var state = DEFAULT_STATE {
         didSet {
-            actions = actionsForState(state)
+            print("didSet state \(state)")
+            if oldValue.actions != state.actions {
+                actions = actionsForState(state)
+            }
             menuTitleSignal.fire(state.title)
             let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
             let capturedState = state
@@ -53,7 +56,10 @@ class PomodoroController {
             menuActions.append(MenuAction(title: "Resume", action: { [weak self] _ in self?.state = resumedState }))
         }
         if let skippedState = state.nextSkip {
-            menuActions.append(MenuAction(title: "Skip", action: { [weak self] _ in self?.state = skippedState }))
+            menuActions.append(MenuAction(title: "Skip", action: { [weak self] _ in
+                print("skip to \(skippedState)")
+                self?.state = skippedState
+                }))
         }
         return menuActions
     }

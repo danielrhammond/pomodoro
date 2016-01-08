@@ -17,6 +17,14 @@ enum StatusBarState {
     case OnBreak(Int)
 }
 
+struct Actions : OptionSetType {
+    let rawValue : Int
+    static let Start = Actions(rawValue: 1 << 1)
+    static let Pause = Actions(rawValue: 1 << 2)
+    static let Resume = Actions(rawValue: 1 << 3)
+    static let Skip = Actions(rawValue: 1 << 4)
+}
+
 extension StatusBarState {
     var duration: Int {
         get {
@@ -93,6 +101,17 @@ extension StatusBarState {
         }
     }
 
+    var pausedState: StatusBarState? {
+        switch self {
+        case .OnBreak(let d):
+            return .PausedBreak(d)
+        case .OnWork(let d):
+            return .PausedWork(d)
+        default:
+            return nil
+        }
+    }
+    
     var startedState: StatusBarState? {
         switch self {
         case .WaitingWork(let d):
@@ -101,6 +120,25 @@ extension StatusBarState {
             return .OnBreak(d)
         default:
             return nil
+        }
+    }
+    
+    var actions: Actions {
+        get {
+            var result = Actions()
+            if startedState != nil {
+                result.unionInPlace(.Resume)
+            }
+            if pausedState != nil {
+                result.unionInPlace(.Pause)
+            }
+            if resumedState != nil {
+                result.unionInPlace(.Resume)
+            }
+            if nextSkip != nil {
+                result.unionInPlace(.Skip)
+            }
+            return result
         }
     }
 }
