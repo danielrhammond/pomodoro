@@ -8,7 +8,7 @@
 
 import Foundation
 
-private let DEFAULT_STATE = StatusBarState.Waiting(10)
+private let DEFAULT_STATE = StatusBarState.WaitingWork(10)
 
 class PomodoroController {
     // MARK: Public Properties
@@ -21,21 +21,20 @@ class PomodoroController {
             menuTitleSignal.fire(state.title)
             let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
             dispatch_after(delayTime, dispatch_get_main_queue()) { [weak self] in
-                if let state = self?.state, case .On(let duration) = state {
-                    if duration > 0 {
-                        self?.state = .On(duration-1)
-                    } else {
-                        self?.state = .Waiting(10)
-                    }
+                guard let state = self?.state else { return }
+                if let next = state.nextTick {
+                    self?.state = next
                 }
             }
         }
     }
+    
     private var actions = [MenuAction]() {
         didSet {
             menuActionSignal.fire(actions)
         }
     }
+    
     // MARK: Init
     required init() {
         actions = actionsForState(state)
@@ -45,23 +44,16 @@ class PomodoroController {
     
     // MARK: Menu Actions
     private func actionsForState(state: StatusBarState) -> [MenuAction] {
-        switch state {
-        case .Waiting(let duration):
-            let start = MenuAction(title: "Start", action: { [weak self] _ in
-                self?.state = .On(duration)
-            })
-            return [start]
-        case .On(let duration):
-            let pause = MenuAction(title: "Pause", action: { [weak self] _ in
-                self?.state = .Paused(duration)
-            })
-            return [pause]
-        case .Paused(let duration):
-            let resume = MenuAction(title: "Resume", action: { [weak self] _ in
-                self?.state = .On(duration)
-            })
-            return [resume]
+        var menuActions = [MenuAction]()
+        if let startedState = state.startedState {
+            menuActions.append(MenuAction(title: "Start", action: { [weak self] _ in self?.state = startedState }))
         }
-
+        if let resumedState = state.resumedState {
+            menuActions.append(MenuAction(title: "Resume", action: { [weak self] _ in self?.state = resumedState }))
+        }
+        if let skippedState = state.nextSkip {
+            menuActions.append(MenuAction(title: "Skip", action: { [weak self] _ in self?.state = skippedState }))
+        }
+        return menuActions
     }
 }

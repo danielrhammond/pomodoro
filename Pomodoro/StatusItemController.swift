@@ -9,16 +9,39 @@
 import Cocoa
 
 enum StatusBarState {
-    case Waiting(Int)
-    case Paused(Int)
-    case On(Int)
+    case WaitingWork(Int)
+    case PausedWork(Int)
+    case OnWork(Int)
+    case WaitingBreak(Int)
+    case PausedBreak(Int)
+    case OnBreak(Int)
 }
 
 extension StatusBarState {
+    var duration: Int {
+        get {
+            switch self {
+            case .WaitingWork(let d):
+                return d
+            case .PausedWork(let d):
+                return d
+            case .OnWork(let d):
+                return d
+            case .WaitingBreak(let d):
+                return d
+            case .PausedBreak(let d):
+                return d
+            case .OnBreak(let d):
+                return d
+            }
+        }
+    }
+
     var menuActions: [MenuAction] {
         get {
             switch self {
-            case .Waiting(let duration):
+            case .WaitingWork, .WaitingBreak:
+                let duration = self.duration
                 let start = MenuAction(title: "Start", action: { _ in print("start: \(duration)") })
                 return [start]
             default:
@@ -26,19 +49,71 @@ extension StatusBarState {
             }
         }
     }
-}
 
-extension StatusBarState {
     var title: String {
         get {
             switch self {
-            case .Waiting(let duration):
+            case .WaitingWork, .WaitingBreak:
+                let duration = self.duration
                 return "Waiting \(formatSeconds(duration))"
-            case .Paused(let duration):
+            case .PausedWork, .PausedBreak:
+                let duration = self.duration
                 return "Paused \(formatSeconds(duration))"
-            case .On(let duration):
-                return "\(formatSeconds(duration))"
+            case .OnWork(let duration):
+                return "Work: \(formatSeconds(duration))"
+            case .OnBreak(let duration):
+                return "Break: \(formatSeconds(duration))"
             }
+        }
+    }
+    
+    var nextTick: StatusBarState? {
+        switch self {
+        case .OnBreak:
+            if duration > 0 {
+                return .OnBreak(duration-1)
+            } else {
+                return .WaitingWork(10)
+            }
+        case .OnWork:
+            if duration > 0 {
+                return .OnWork(duration-1)
+            } else {
+                return .WaitingBreak(10)
+            }
+        default:
+            return nil
+        }
+    }
+    
+    var nextSkip: StatusBarState? {
+        switch self {
+        case .PausedWork, .PausedBreak, .WaitingBreak, .OnBreak, .OnWork:
+            return .WaitingWork(10)
+        default:
+            return nil
+        }
+    }
+
+    var resumedState: StatusBarState? {
+        switch self {
+        case .PausedWork(let d):
+            return .OnWork(d)
+        case .PausedBreak(let d):
+            return .OnBreak(d)
+        default:
+            return nil
+        }
+    }
+
+    var startedState: StatusBarState? {
+        switch self {
+        case .WaitingWork(let d):
+            return .OnWork(d)
+        case .WaitingBreak(let d):
+            return .OnBreak(d)
+        default:
+            return nil
         }
     }
 }
