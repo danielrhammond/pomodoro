@@ -8,8 +8,8 @@
 
 import Foundation
 
-let WORK_DURATION = 180
-let BREAK_DURATION = 90
+let WORK_DURATION = 25*60
+let BREAK_DURATION = 5*60
 private let DEFAULT_STATE = StatusBarState.WaitingWork(WORK_DURATION)
 
 class PomodoroController {
