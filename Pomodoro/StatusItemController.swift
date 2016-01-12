@@ -66,13 +66,13 @@ extension StatusBarState {
     var nextTick: StatusBarState? {
         switch self {
         case .OnBreak:
-            if duration > 0 {
+            if duration > 1 {
                 return .OnBreak(duration-1)
             } else {
                 return .WaitingWork(WORK_DURATION)
             }
         case .OnWork:
-            if duration > 0 {
+            if duration > 1 {
                 return .OnWork(duration-1)
             } else {
                 return .WaitingBreak(BREAK_DURATION)
