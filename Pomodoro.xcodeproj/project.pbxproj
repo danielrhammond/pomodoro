@@ -17,6 +17,7 @@
 		3D0122B71C3CD33A001FB7E2 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0122B61C3CD33A001FB7E2 /* Menu.swift */; };
 		3D0122BB1C3CDB52001FB7E2 /* PomodoroController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0122BA1C3CDB52001FB7E2 /* PomodoroController.swift */; };
 		3D0122BD1C3CDCA4001FB7E2 /* Signal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0122BC1C3CDCA4001FB7E2 /* Signal.swift */; };
+		3D9EFC3A1C44CE10006B44B5 /* Mute_Metal.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 3D9EFC391C44CE10006B44B5 /* Mute_Metal.aiff */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		3D0122B61C3CD33A001FB7E2 /* Menu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
 		3D0122BA1C3CDB52001FB7E2 /* PomodoroController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PomodoroController.swift; sourceTree = "<group>"; };
 		3D0122BC1C3CDCA4001FB7E2 /* Signal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Signal.swift; sourceTree = "<group>"; };
+		3D9EFC391C44CE10006B44B5 /* Mute_Metal.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = Mute_Metal.aiff; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +85,7 @@
 		3D01227D1C3B9290001FB7E2 = {
 			isa = PBXGroup;
 			children = (
+				3D9EFC391C44CE10006B44B5 /* Mute_Metal.aiff */,
 				3D0122881C3B9290001FB7E2 /* Pomodoro */,
 				3D0122981C3B9290001FB7E2 /* PomodoroTests */,
 				3D0122A31C3B9290001FB7E2 /* PomodoroUITests */,
@@ -239,6 +242,7 @@
 			files = (
 				3D01228C1C3B9290001FB7E2 /* Assets.xcassets in Resources */,
 				3D01228F1C3B9290001FB7E2 /* MainMenu.xib in Resources */,
+				3D9EFC3A1C44CE10006B44B5 /* Mute_Metal.aiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -490,6 +494,7 @@
 				3D0122AB1C3B9290001FB7E2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3D0122AC1C3B9290001FB7E2 /* Build configuration list for PBXNativeTarget "PomodoroTests" */ = {
 			isa = XCConfigurationList;
@@ -498,6 +503,7 @@
 				3D0122AE1C3B9290001FB7E2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3D0122AF1C3B9290001FB7E2 /* Build configuration list for PBXNativeTarget "PomodoroUITests" */ = {
 			isa = XCConfigurationList;
@@ -506,6 +512,7 @@
 				3D0122B11C3B9290001FB7E2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
