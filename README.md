@@ -11,3 +11,9 @@
 	- Toggle sounds
 	- Notification
 	- Key shortcuts
+
+## More meta todo
+
+- Release plan for this (oss, app-store, ...?)
+- Probably make mini-site/page for it either way
+- Rewrite using Rx
