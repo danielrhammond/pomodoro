@@ -9,8 +9,8 @@
 import Foundation
 import AppKit
 
-let WORK_DURATION = 25*60
-let BREAK_DURATION = 5*60
+let WORK_DURATION = 25 // *60
+let BREAK_DURATION = 5 // *60
 private let DEFAULT_STATE = StatusBarState.WaitingWork(WORK_DURATION)
 
 class Soundboard {
@@ -40,6 +40,7 @@ class PomodoroController {
                     if case .WaitingWork = next {
                         Soundboard.sharedInstance.playAlert()
                     } else if case .WaitingBreak = next {
+                        self?.successfulCount++
                         Soundboard.sharedInstance.playAlert()
                     }
                     self?.state = next
@@ -47,10 +48,14 @@ class PomodoroController {
             }
         }
     }
-    
     private var actions = [MenuAction]() {
         didSet {
             menuActionSignal.fire(actions)
+        }
+    }
+    private var successfulCount: Int = 0 {
+        didSet {
+            actions = actionsForState(state)
         }
     }
     
@@ -76,6 +81,8 @@ class PomodoroController {
         if state.actions.contains(.Skip) {
             menuActions.append(MenuAction(title: "Skip", action: { [weak self] _ in self?.state = (self?.state.nextSkip!)! }))
         }
+        menuActions.append(MenuAction(title: "Success: \(successfulCount)", action: nil))
+        menuActions.append(MenuAction(title: "Quit", action: { _ in exit(EXIT_SUCCESS) }))
         return menuActions
     }
 }

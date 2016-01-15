@@ -18,7 +18,11 @@ import Cocoa
         self.title = title
         self.action = action
         super.init()
-        item.target = self
+        if action == nil {
+            item.enabled = false
+        } else {
+            item.target = self
+        }
     }
     
     @objc private func act(item: NSMenuItem) {
