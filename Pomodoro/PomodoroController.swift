@@ -9,15 +9,23 @@
 import Foundation
 import AppKit
 
-let WORK_DURATION = 25 // *60
-let BREAK_DURATION = 5 // *60
+let WORK_DURATION = 25*60
+let BREAK_DURATION = 5*60
 private let DEFAULT_STATE = StatusBarState.WaitingWork(WORK_DURATION)
 
 class Soundboard {
     static var sharedInstance = Soundboard()
     private lazy var sound: NSSound? = { NSSound(contentsOfURL: NSBundle.mainBundle().URLForResource("Mute_Metal", withExtension: "aiff")!, byReference: false) }()
-    func playAlert() {
+    func playAlert(shouldRepeat: (Void->Bool)? = nil) {
         sound!.play()
+        if let shouldRepeat = shouldRepeat {
+            let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(60 * Double(NSEC_PER_SEC)))
+            dispatch_after(delayTime, dispatch_get_main_queue(), { [weak self] in
+                if shouldRepeat() {
+                    self?.playAlert(shouldRepeat)
+                }
+            })
+        }
     }
 }
 
@@ -37,11 +45,14 @@ class PomodoroController {
             dispatch_after(delayTime, dispatch_get_main_queue()) { [weak self] in
                 guard let state = self?.state where state == capturedState else { return }
                 if let next = state.nextTick {
-                    if case .WaitingWork = next {
-                        Soundboard.sharedInstance.playAlert()
-                    } else if case .WaitingBreak = next {
-                        self?.successfulCount++
-                        Soundboard.sharedInstance.playAlert()
+                    switch next {
+                    case .WaitingWork, .WaitingBreak:
+                        Soundboard.sharedInstance.playAlert({
+                            guard let state = self?.state else { return false }
+                            return state == next
+                        })
+                    default:
+                        break
                     }
                     self?.state = next
                 }
