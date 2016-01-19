@@ -1,19 +1,16 @@
 # Pomodoro
 
+My super hacky mac pomodoro app that lives in the tab bar and doesn't bug you with ads or other bullshit like the ones in the app store. I expect the utility of this to be pretty much limited just to me.
+
 ## TODO
 
-- Track how many cycles successfully completed (per day? manual reset?)
+- Track how many cycles successfully completed
 - Better appearance in status bar
-- Notificatons?
-- Shortcuts
+- Optional global shortcuts
 - Settings
 	- Set durations for 
 	- Toggle sounds
 	- Notification
 	- Key shortcuts
-
-## More meta todo
-
-- Release plan for this (oss, app-store, ...?)
-- Probably make mini-site/page for it either way
 - Rewrite using Rx
+- Notificatons?
