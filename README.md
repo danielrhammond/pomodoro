@@ -1,12 +1,12 @@
 # Pomodoro
 
-My super hacky mac pomodoro app that lives in the tab bar and doesn't bug you with ads or other bullshit like the ones in the app store. I expect the utility of this to be pretty much limited just to me, and it's mostly so I can fuck around with AppKit and try and learn some new stuff.
+My super-simple mac menu bar [pomodoro](https://en.wikipedia.org/wiki/Pomodoro_Technique) timer app that isn't as awful as all the ones in the app store. I expect the utility of this to be pretty much limited just to me, and it's mostly so I can try and learn some new stuff and I'm making it public just to shamelessly try and build a github commit streak going/make some public activity every now and then.
 
 ## TODO
 
 - Track how many cycles successfully completed
 - Better appearance in status bar
-- Optional global shortcuts
+- Keyboard shortcuts
 - Settings
 	- Set durations for 
 	- Toggle sounds
@@ -16,4 +16,4 @@ My super hacky mac pomodoro app that lives in the tab bar and doesn't bug you wi
 
 ## Acknowledgements
 
-UI Sounds From [Sonics](http://www.sonics.io/)
+UI Sounds from [Sonics](http://www.sonics.io/)
