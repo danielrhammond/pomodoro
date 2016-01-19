@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Interstellar
 
 let WORK_DURATION = 25*60
 let BREAK_DURATION = 5*60
@@ -23,7 +24,7 @@ class PomodoroController {
             if oldValue.actions != state.actions {
                 actions = actionsForState(state)
             }
-            menuTitleSignal.fire(state.title)
+            menuTitleSignal.update(state.title)
             let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
             let capturedState = state
             dispatch_after(delayTime, dispatch_get_main_queue()) { [weak self] in
@@ -32,12 +33,12 @@ class PomodoroController {
                     self?.state = next
                 }
             }
-            stateSignal.fire(state)
+            stateSignal.update(state)
         }
     }
     private var actions = [MenuAction]() {
         didSet {
-            menuActionSignal.fire(actions)
+            menuActionSignal.update(actions)
         }
     }
     private var successfulCount: Int = 0 {
@@ -49,8 +50,8 @@ class PomodoroController {
     // MARK: Init
     required init() {
         actions = actionsForState(state)
-        menuActionSignal.fire(actions)
-        menuTitleSignal.fire(state.title)
+        menuActionSignal.update(actions)
+        menuTitleSignal.update(state.title)
     }
     
     // MARK: Menu Actions

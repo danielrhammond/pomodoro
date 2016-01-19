@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import Interstellar
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -15,11 +16,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private lazy var audioController = AudioController()
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
-        pomodoroController.menuTitleSignal.observe { [weak item] (title) in item?.title = title }
-        pomodoroController.menuActionSignal.observe { [weak item] (actions) in
+        pomodoroController.menuTitleSignal.next { [weak item] (title) in
+            item?.title = title
+        }
+        pomodoroController.menuActionSignal.next {[weak item] (actions) in
             item?.menu = NSMenu(actions: actions)
         }
-        pomodoroController.stateSignal.observe { [weak audioController] state in
+        pomodoroController.stateSignal.next { [weak audioController] state in
             switch state {
             case .WaitingBreak, .WaitingWork:
                 audioController?.playAlert()
