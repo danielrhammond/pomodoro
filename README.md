@@ -14,3 +14,8 @@ My super hacky mac pomodoro app that lives in the tab bar and doesn't bug you wi
 	- Key shortcuts
 - Rewrite using Rx
 - Notificatons?
+
+## Acknowledgements
+
+`muted_metal.aiff` - From [Sonics](http://www.sonics.io/)
+
