@@ -8,7 +8,8 @@
 
 import Foundation
 
-/// Hillariously simple and not threadsafe implementation
+// Hillariously simple and not threadsafe implementation
+// FIXME: Use someone else's real implementation
 class Signal<T> {
     typealias Action = T -> Void
     private var observers = [Action]()
