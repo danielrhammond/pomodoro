@@ -31,6 +31,9 @@ class PomodoroController {
                 guard let state = self?.state where state == capturedState else { return }
                 if let next = state.nextTick {
                     self?.state = next
+                    if case .WaitingBreak = next {
+                        self?.successfulCount++
+                    }
                 }
             }
             stateSignal.update(state)
