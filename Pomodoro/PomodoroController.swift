@@ -15,8 +15,8 @@ private let DEFAULT_STATE = StatusBarState.WaitingWork(WORK_DURATION)
 
 class PomodoroController {
     // MARK: Public Properties
-    let menuActionSignal = Signal<[MenuAction]>()
-    let menuTitleSignal = Signal<String>()
+    lazy var menuActionSignal = Signal<[MenuAction]>()
+    let menuTitleSignal: Signal<String>
     let stateSignal = Signal<StatusBarState>()
     // MARK: Private Properties
     private(set) var state = DEFAULT_STATE {
@@ -24,7 +24,6 @@ class PomodoroController {
             if oldValue.actions != state.actions {
                 actions = actionsForState(state)
             }
-            menuTitleSignal.update(state.title)
             let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
             let capturedState = state
             dispatch_after(delayTime, dispatch_get_main_queue()) { [weak self] in
@@ -52,9 +51,10 @@ class PomodoroController {
     
     // MARK: Init
     required init() {
+        menuTitleSignal = stateSignal.map { state in return state.title }
         actions = actionsForState(state)
         menuActionSignal.update(actions)
-        menuTitleSignal.update(state.title)
+        stateSignal.update(state)
     }
     
     // MARK: Menu Actions
