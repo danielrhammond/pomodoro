@@ -21,9 +21,6 @@ class PomodoroController {
     // MARK: Private Properties
     private(set) var state = DEFAULT_STATE {
         didSet {
-            if oldValue.actions != state.actions {
-                actions = actionsForState(state)
-            }
             let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
             let capturedState = state
             dispatch_after(delayTime, dispatch_get_main_queue()) { [weak self] in
@@ -52,7 +49,12 @@ class PomodoroController {
     // MARK: Init
     required init() {
         menuTitleSignal = stateSignal.map { state in return state.title }
-        actions = actionsForState(state)
+        stateSignal.next({ state in
+            let newActions = self.actionsForState(state)
+            if newActions != self.actions {
+                self.actions = newActions
+            }
+        })
         menuActionSignal.update(actions)
         stateSignal.update(state)
     }
