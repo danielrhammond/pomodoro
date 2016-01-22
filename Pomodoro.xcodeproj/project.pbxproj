@@ -19,8 +19,6 @@
 		3D5A4C991C520C5F002998B2 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5A4C981C520C5F002998B2 /* RxSwift.framework */; };
 		3D5A4C9A1C528713002998B2 /* RxSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D5A4C981C520C5F002998B2 /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3D7B91281C4DF0FB00684363 /* AudioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D7B91271C4DF0FB00684363 /* AudioController.swift */; };
-		3D7B912B1C4DF60B00684363 /* Interstellar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D7B912A1C4DF60B00684363 /* Interstellar.framework */; };
-		3D7B912C1C4DF60B00684363 /* Interstellar.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D7B912A1C4DF60B00684363 /* Interstellar.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3D9EFC3A1C44CE10006B44B5 /* Mute_Metal.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 3D9EFC391C44CE10006B44B5 /* Mute_Metal.aiff */; };
 /* End PBXBuildFile section */
 
@@ -49,7 +47,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				3D5A4C9A1C528713002998B2 /* RxSwift.framework in Embed Frameworks */,
-				3D7B912C1C4DF60B00684363 /* Interstellar.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -74,7 +71,6 @@
 		3D0122BA1C3CDB52001FB7E2 /* PomodoroController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PomodoroController.swift; sourceTree = "<group>"; };
 		3D5A4C981C520C5F002998B2 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/Mac/RxSwift.framework; sourceTree = "<group>"; };
 		3D7B91271C4DF0FB00684363 /* AudioController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioController.swift; sourceTree = "<group>"; };
-		3D7B912A1C4DF60B00684363 /* Interstellar.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Interstellar.framework; path = Carthage/Build/Mac/Interstellar.framework; sourceTree = "<group>"; };
 		3D9EFC391C44CE10006B44B5 /* Mute_Metal.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = Mute_Metal.aiff; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -84,7 +80,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D5A4C991C520C5F002998B2 /* RxSwift.framework in Frameworks */,
-				3D7B912B1C4DF60B00684363 /* Interstellar.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,7 +168,6 @@
 			isa = PBXGroup;
 			children = (
 				3D5A4C981C520C5F002998B2 /* RxSwift.framework */,
-				3D7B912A1C4DF60B00684363 /* Interstellar.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
