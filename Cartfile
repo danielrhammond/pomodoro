@@ -1,1 +1,2 @@
 github "JensRavens/Interstellar"
+github "ReactiveX/RxSwift" ~> 2.0
