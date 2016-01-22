@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Interstellar
+import RxSwift
 
 let WORK_DURATION = 25*60
 let BREAK_DURATION = 5*60
@@ -15,9 +15,9 @@ private let DEFAULT_STATE = StatusBarState.WaitingWork(WORK_DURATION)
 
 class PomodoroController {
     // MARK: Public Properties
-    lazy var menuActionSignal = Signal<[MenuAction]>()
-    let menuTitleSignal: Signal<String>
-    let stateSignal = Signal<StatusBarState>()
+    lazy var menuActionSignal = Observable<[MenuAction]>()
+    let menuTitleSignal: Observable<String>
+    let stateSignal = Observable<StatusBarState>()
     // MARK: Private Properties
     private(set) var state = DEFAULT_STATE {
         didSet {
