@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Interstellar
+import RxSwift
 
 let WORK_DURATION = 25*60
 let BREAK_DURATION = 5*60
@@ -15,11 +15,12 @@ private let DEFAULT_STATE = StatusBarState.WaitingWork(WORK_DURATION)
 
 class PomodoroController {
     // MARK: Public Properties
-    lazy var menuActionSignal = Signal<[MenuAction]>()
-    let menuTitleSignal: Signal<String>
-    let stateSignal = Signal<StatusBarState>()
+    let menuActionSignal: Observable<[MenuAction]>
+    let menuTitleSignal: Observable<String>
+    let stateSignal: Observable<StatusBarState>
     // MARK: Private Properties
-    private(set) var state = DEFAULT_STATE {
+    
+    private(set) var Variable<StatusBarState> = DEFAULT_STATE {
         didSet {
             let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
             let capturedState = state
@@ -32,6 +33,7 @@ class PomodoroController {
                     }
                 }
             }
+            stateSignal.
             stateSignal.update(state)
         }
     }
@@ -49,13 +51,9 @@ class PomodoroController {
     // MARK: Init
     required init() {
         menuTitleSignal = stateSignal.map { state in return state.title }
-        stateSignal.next({ state in
-            let newActions = self.actionsForState(state)
-            if newActions != self.actions {
-                self.actions = newActions
-            }
-        })
-        menuActionSignal.update(actions)
+        menuActionSignal = stateSignal.map { state in return self.actionsForState(state) }
+        state.nextSkip
+        let v = Variable<StatusBarState>(DEFAULT_STATE)
         stateSignal.update(state)
     }
     
