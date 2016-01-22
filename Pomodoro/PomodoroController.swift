@@ -15,65 +15,44 @@ private let DEFAULT_STATE = StatusBarState.WaitingWork(WORK_DURATION)
 
 class PomodoroController {
     // MARK: Public Properties
-    let menuActionSignal: Observable<[MenuAction]>
-    let menuTitleSignal: Observable<String>
-    let stateSignal: Observable<StatusBarState>
-    // MARK: Private Properties
-    
-    private(set) var Variable<StatusBarState> = DEFAULT_STATE {
-        didSet {
-            let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
-            let capturedState = state
-            dispatch_after(delayTime, dispatch_get_main_queue()) { [weak self] in
-                guard let state = self?.state where state == capturedState else { return }
-                if let next = state.nextTick {
-                    self?.state = next
-                    if case .WaitingBreak = next {
-                        self?.successfulCount++
-                    }
-                }
+    lazy var menuTitleSignal: Observable<String> = { self.state.asObservable().map({ state in return state.title }) }()
+    lazy var menuActionSignal: Observable<[MenuAction]> = {
+        self.state.asObservable().map({ state in return state.actions }).distinctUntilChanged().map { actions in
+            var menuActions = [MenuAction]()
+            if actions.contains(.Start) {
+                menuActions.append(MenuAction(title: "Start", action: { [weak self] _ in self?.state.value = (self?.state.value.startedState!)! }))
             }
-            stateSignal.
-            stateSignal.update(state)
+            if actions.contains(.Pause) {
+                menuActions.append(MenuAction(title: "Pause", action: { [weak self] _ in self?.state.value = (self?.state.value.pausedState!)! }))
+            }
+            if actions.contains(.Resume) {
+                menuActions.append(MenuAction(title: "Resume", action: { [weak self] _ in self?.state.value = (self?.state.value.resumedState!)! }))
+            }
+            if actions.contains(.Skip) {
+                menuActions.append(MenuAction(title: "Skip", action: { [weak self] _ in self?.state.value = (self?.state.value.nextSkip!)! }))
+            }
+            //menuActions.append(MenuAction(title: "Success: \(successfulCount)", action: nil))
+            menuActions.append(MenuAction(title: "Quit", action: { _ in exit(EXIT_SUCCESS) }))
+            self.actions = menuActions
+            return menuActions
         }
-    }
-    private var actions = [MenuAction]() {
-        didSet {
-            menuActionSignal.update(actions)
-        }
-    }
-    private var successfulCount: Int = 0 {
-        didSet {
-            actions = actionsForState(state)
-        }
-    }
+    }()
+    let state = Variable<StatusBarState>(DEFAULT_STATE)
+    // MARK: Private Properties
+    private var actions = [MenuAction]()
+    private let bag = DisposeBag()
     
     // MARK: Init
     required init() {
-        menuTitleSignal = stateSignal.map { state in return state.title }
-        menuActionSignal = stateSignal.map { state in return self.actionsForState(state) }
-        state.nextSkip
-        let v = Variable<StatusBarState>(DEFAULT_STATE)
-        stateSignal.update(state)
-    }
-    
-    // MARK: Menu Actions
-    private func actionsForState(state: StatusBarState) -> [MenuAction] {
-        var menuActions = [MenuAction]()
-        if state.actions.contains(.Start) {
-            menuActions.append(MenuAction(title: "Start", action: { [weak self] _ in self?.state = (self?.state.startedState!)! }))
-        }
-        if state.actions.contains(.Pause) {
-            menuActions.append(MenuAction(title: "Pause", action: { [weak self] _ in self?.state = (self?.state.pausedState!)! }))
-        }
-        if state.actions.contains(.Resume) {
-            menuActions.append(MenuAction(title: "Resume", action: { [weak self] _ in self?.state = (self?.state.resumedState!)! }))
-        }
-        if state.actions.contains(.Skip) {
-            menuActions.append(MenuAction(title: "Skip", action: { [weak self] _ in self?.state = (self?.state.nextSkip!)! }))
-        }
-        menuActions.append(MenuAction(title: "Success: \(successfulCount)", action: nil))
-        menuActions.append(MenuAction(title: "Quit", action: { _ in exit(EXIT_SUCCESS) }))
-        return menuActions
+        state.asObservable().subscribeNext({ [weak self] state in
+            let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
+            let capturedState = state
+            dispatch_after(delayTime, dispatch_get_main_queue()) { [weak self] in
+                guard let state = self?.state where state.value == capturedState else { return }
+                if let next = state.value.nextTick {
+                    self?.state.value = next
+                }
+            }
+        }).addDisposableTo(bag)
     }
 }

@@ -14,25 +14,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private lazy var item: NSStatusItem = { NSStatusBar.systemStatusBar().statusItemWithLength(-1) }()
     private lazy var pomodoroController = PomodoroController()
     private lazy var audioController = AudioController()
+    private var bag = DisposeBag()
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
-        pomodoroController.menuTitleSignal.subscribeNext { [weak item] (title) -> Void in
+        pomodoroController.menuTitleSignal.subscribeNext({ [weak item] (title) -> Void in
             item?.title = title
-        }
+        }).addDisposableTo(bag)
         
-
-        
-        pomodoroController.menuActionSignal.next {[weak item] (actions) in
+        pomodoroController.menuActionSignal.subscribeNext({ [weak item] (actions) in
             item?.menu = NSMenu(actions: actions)
-        }
-        pomodoroController.stateSignal.next { [weak audioController] state in
-            switch state {
-            case .WaitingBreak, .WaitingWork:
-                audioController?.playAlert()
-            default:
-                break
-            }
-        }
+        }).addDisposableTo(bag)
+        
+//        pomodoroController.stateSignal.next { [weak audioController] state in
+//            switch state {
+//            case .WaitingBreak, .WaitingWork:
+//                audioController?.playAlert()
+//            default:
+//                break
+//            }
+//        }
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
