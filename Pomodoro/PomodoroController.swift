@@ -38,7 +38,8 @@ class PomodoroController {
             return menuActions
         }
     }()
-    let automaticState = Variable<StatusBarState>(DEFAULT_STATE)
+    private (set) lazy var automaticState: Observable<StatusBarState> = { self.automaticStateVariable.asObservable() }()
+    private let automaticStateVariable = Variable<StatusBarState>(DEFAULT_STATE)
     let state = Variable<StatusBarState>(DEFAULT_STATE)
     // MARK: Private Properties
     private var actions = [MenuAction]()
@@ -52,7 +53,7 @@ class PomodoroController {
             dispatch_after(delayTime, dispatch_get_main_queue()) { [weak self] in
                 guard let state = self?.state where state.value == capturedState else { return }
                 if let next = state.value.nextTick {
-                    self?.automaticState.value = next
+                    self?.automaticStateVariable.value = next
                     self?.state.value = next
                 }
             }

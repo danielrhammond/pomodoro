@@ -25,7 +25,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             item?.menu = NSMenu(actions: actions)
         }).addDisposableTo(bag)
 
-        pomodoroController.automaticState.asObservable().subscribeNext({ [weak audioController] state in
+        pomodoroController.automaticState.subscribeNext({ [weak audioController] state in
             switch state {
             case .WaitingBreak, .WaitingWork:
                 audioController?.playAlert()
