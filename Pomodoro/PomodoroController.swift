@@ -11,7 +11,8 @@ import RxSwift
 
 let WORK_DURATION = 25*60
 let BREAK_DURATION = 5*60
-private let DEFAULT_STATE = StatusBarState.WaitingWork(WORK_DURATION)
+private let DEFAULT_STATE =
+StatusBarState.WaitingWork(WORK_DURATION)
 
 class PomodoroController {
     // MARK: Public Properties
@@ -37,6 +38,7 @@ class PomodoroController {
             return menuActions
         }
     }()
+    let automaticState = Variable<StatusBarState>(DEFAULT_STATE)
     let state = Variable<StatusBarState>(DEFAULT_STATE)
     // MARK: Private Properties
     private var actions = [MenuAction]()
@@ -50,6 +52,7 @@ class PomodoroController {
             dispatch_after(delayTime, dispatch_get_main_queue()) { [weak self] in
                 guard let state = self?.state where state.value == capturedState else { return }
                 if let next = state.value.nextTick {
+                    self?.automaticState.value = next
                     self?.state.value = next
                 }
             }

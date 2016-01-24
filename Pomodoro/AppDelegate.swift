@@ -24,15 +24,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         pomodoroController.menuActionSignal.subscribeNext({ [weak item] (actions) in
             item?.menu = NSMenu(actions: actions)
         }).addDisposableTo(bag)
-        
-//        pomodoroController.stateSignal.next { [weak audioController] state in
-//            switch state {
-//            case .WaitingBreak, .WaitingWork:
-//                audioController?.playAlert()
-//            default:
-//                break
-//            }
-//        }
+
+        pomodoroController.automaticState.asObservable().subscribeNext({ [weak audioController] state in
+            switch state {
+            case .WaitingBreak, .WaitingWork:
+                audioController?.playAlert()
+            default:
+                break
+            }
+        }).addDisposableTo(bag)
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
