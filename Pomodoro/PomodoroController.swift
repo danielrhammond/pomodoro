@@ -9,8 +9,8 @@
 import Foundation
 import RxSwift
 
-let WORK_DURATION = 25*60
-let BREAK_DURATION = 5*60
+let WORK_DURATION = 25 //*60
+let BREAK_DURATION = 5 //*60
 private let DEFAULT_STATE =
 StatusBarState.WaitingWork(WORK_DURATION)
 
@@ -44,19 +44,21 @@ class PomodoroController {
     // MARK: Private Properties
     private var actions = [MenuAction]()
     private let bag = DisposeBag()
+    private let timer = Observable<Int>.timer(0.0, period: 1.0, scheduler: MainScheduler.instance)
+    private lazy var nextState: Observable<StatusBarState> = {
+        self.timer.map({ _ -> StatusBarState? in
+            if let next = self.state.value.nextTick {
+                return next
+            }
+            return nil
+        }).filter({ $0 != nil }).map({ $0! })
+    }()
     
     // MARK: Init
     required init() {
-        state.asObservable().subscribeNext({ [weak self] state in
-            let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
-            let capturedState = state
-            dispatch_after(delayTime, dispatch_get_main_queue()) { [weak self] in
-                guard let state = self?.state where state.value == capturedState else { return }
-                if let next = state.value.nextTick {
-                    self?.automaticStateVariable.value = next
-                    self?.state.value = next
-                }
-            }
+        nextState.subscribeNext({ [weak self] state in
+            self?.automaticStateVariable.value = state
+            self?.state.value = state
         }).addDisposableTo(bag)
     }
 }
